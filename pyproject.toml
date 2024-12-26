@@ -1,0 +1,10 @@
+[project]
+name = "repl-nix-cheatertracker"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = [
+    "discord-py>=2.4.0",
+    "gitpython>=3.1.43",
+    "psycopg2-binary>=2.9.10",
+]

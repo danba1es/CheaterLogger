@@ -1,0 +1,14 @@
+{
+    "colors": {
+        "success": 3066993,
+        "error": 15158332,
+        "info": 3447003
+    },
+    "emojis": {
+        "success": "✅",
+        "error": "❌",
+        "warning": "⚠️",
+        "banned": "🚫",
+        "reported": "👁️"
+    }
+}
