@@ -5,6 +5,7 @@ import os
 from db.database import Database
 from commands.cheater_commands import CheaterCommands
 from utils.config import load_config
+from utils.auto_update import AutoUpdater
 
 # Setup logging
 logging.basicConfig(
@@ -15,19 +16,20 @@ logger = logging.getLogger('bot')
 
 class CheaterBot(commands.Bot):
     def __init__(self):
-        # Enable all necessary intents
+        # Using only default intents without privileged ones
         intents = discord.Intents.default()
-        intents.message_content = True
-        intents.members = True  # Required for role management
-        intents.guilds = True   # Required for guild operations
         super().__init__(command_prefix="!", intents=intents)
 
         self.config = load_config()
         self.db = Database()
+        self.auto_updater = AutoUpdater()
 
     async def setup_hook(self):
         await self.add_cog(CheaterCommands(self))
         await self.tree.sync()
+
+        # Start the auto-update checker
+        self.loop.create_task(self.auto_updater.start_update_checker())
 
     async def create_extra_access_role(self, guild):
         existing_role = discord.utils.get(guild.roles, name="extra access")
@@ -46,10 +48,6 @@ class CheaterBot(commands.Bot):
         logger.info(f'Logged in as {self.user.name}')
         logger.info(f'Bot ID: {self.user.id}')
         logger.info('------')
-
-        # Create roles in all guilds
-        for guild in self.guilds:
-            await self.create_extra_access_role(guild)
 
         # Initialize database
         self.db.initialize_tables()
